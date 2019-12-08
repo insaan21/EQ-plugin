@@ -15,6 +15,24 @@ MainComponent::MainComponent()
     // you add any child components.
     setSize (800, 600);
     
+    freqSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    freqSlider.setRange(50.0, 500.0);
+    freqSlider.addListener(this);
+    freqSlider.setValue(200.0);
+    freqSlider.setTextValueSuffix("Hz");
+    addAndMakeVisible(freqSlider);
+    freqLabel.setText("Frequency", dontSendNotification);
+    freqLabel.attachToComponent(&freqSlider, true);
+    
+    
+    ampSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    ampSlider.setRange(0.0, 1.0);
+    ampSlider.addListener(this);
+    ampSlider.setValue(0.25);
+    // ampSlider.setTextValueSuffix("Hz");
+    addAndMakeVisible(ampSlider);
+    ampLabel.setText("Amplitude", dontSendNotification);
+    ampLabel.attachToComponent(&ampSlider, true);
 
     // Some platforms require permissions to open input channels so request that here
     if (RuntimePermissions::isRequired (RuntimePermissions::recordAudio)
@@ -39,28 +57,31 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-
-    // For more details, see the help for AudioProcessor::prepareToPlay()
+    frequency = freqSlider.getValue();
+    phase = 0;
+    waveTableLength = 1024;
+    amplitude = ampSlider.getValue();
+    currSampleRate = sampleRate;
+    
+    for (int i = 0; i < waveTableLength; ++i){
+        waveTable.insert(i, sin(2.0 * double_Pi * i/waveTableLength));
+    }
 }
 
 void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
     
-    //creates buffer with buffer class
-    for (int channel = 0; channel< bufferToFill.buffer->getNumChannels(); ++channel){
-         float* const buffer = bufferToFill.buffer -> getWritePointer(channel, bufferToFill.startSample);
-        
+    
+        float* const leftSpeaker = bufferToFill.buffer -> getWritePointer(0, bufferToFill.startSample);
+        float* const rightSpeaker = bufferToFill.buffer -> getWritePointer(1, bufferToFill.startSample);
         //fills buffer w output
         for(int sample = 0; sample < bufferToFill.numSamples; ++sample)
         {
-            buffer[sample] = ((random.nextFloat() *2.0f- 1.0f) *0.25f);
+            leftSpeaker[sample] = waveTable[(int) phase] * amplitude;
+            rightSpeaker[sample] = waveTable[(int) phase] * amplitude;
+            updateFreq();
         }
-    }
+    
     
     
 } 
@@ -82,9 +103,14 @@ void MainComponent::paint (Graphics& g)
     // You can add your drawing code here!
 }
 
+
+
 void MainComponent::resized()
 {
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
+    freqSlider.setBounds(getWidth()/3, getHeight()/3, getWidth()/3, getHeight()/3);
+    ampSlider.setBounds(getWidth()/3, 2*getHeight()/3, getWidth()/3, getHeight()/3);
+    
 }
