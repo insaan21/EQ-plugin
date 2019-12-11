@@ -134,6 +134,8 @@ void TestPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    
+    // rawVolume = 0.015;
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -152,7 +154,11 @@ void TestPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
+        float* channelData = buffer.getWritePointer (channel);
+        
+        for(int sample = 0; sample < buffer.getNumSamples(); ++sample){
+            channelData[sample] = buffer.getSample(channel, sample) * rawVolume;
+        }
 
         // ..do something to the data...
     }
