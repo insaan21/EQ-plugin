@@ -27,6 +27,9 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     void sliderValueChanged(Slider * slider) override;
+    double volume(double currDB);
+    
+    std::unique_ptr <AudioProcessorValueTreeState:: SliderAttachment> sliderAttach;
     
 private:
     // This reference is provided as a quick way for your editor to

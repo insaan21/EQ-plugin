@@ -11,11 +11,14 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#define GAIN_ID "gain"
+#define GAIN_NAME "Gain"
 
 //==============================================================================
 /**
 */
 class TestPluginAudioProcessor  : public AudioProcessor
+
 {
 public:
     //==============================================================================
@@ -56,6 +59,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     double rawVolume;
+    AudioProcessorValueTreeState treeState;
 private:
     
     //==============================================================================

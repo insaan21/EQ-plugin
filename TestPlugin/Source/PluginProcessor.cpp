@@ -21,9 +21,15 @@ TestPluginAudioProcessor::TestPluginAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+        rawVolume(-5.0f),
+        treeState(*this, nullptr)
 #endif
 {
+    NormalisableRange<float> valueRange(-48.0f, 0.0f);
+    using Parameter = AudioProcessorValueTreeState::Parameter;
+    treeState.createAndAddParameter (std::make_unique<Parameter> (GAIN_ID, GAIN_NAME, GAIN_NAME, valueRange, 0.5f, nullptr, nullptr));
+  
 }
 
 TestPluginAudioProcessor::~TestPluginAudioProcessor()
@@ -157,7 +163,7 @@ void TestPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
         float* channelData = buffer.getWritePointer (channel);
         
         for(int sample = 0; sample < buffer.getNumSamples(); ++sample){
-            channelData[sample] = buffer.getSample(channel, sample) * rawVolume;
+            channelData[sample] = buffer.getSample(channel, sample) * pow(10.0, rawVolume/20.0);
         }
 
         // ..do something to the data...
