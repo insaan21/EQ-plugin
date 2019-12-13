@@ -22,14 +22,11 @@ TestPluginAudioProcessor::TestPluginAudioProcessor()
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
                        ),
-        rawVolume(-5.0f),
-        treeState(*this, nullptr)
+        // rawVolume(-5.0f),
+        treeState(*this, nullptr, "PARAMETERS", {std::make_unique<AudioParameterFloat> (GAIN_ID, GAIN_NAME, -48.0f, 0.0f, -15.0f)})
 #endif
 {
-    NormalisableRange<float> valueRange(-48.0f, 0.0f);
-    using Parameter = AudioProcessorValueTreeState::Parameter;
-    treeState.createAndAddParameter (std::make_unique<Parameter> (GAIN_ID, GAIN_NAME, GAIN_NAME, valueRange, 0.5f, nullptr, nullptr));
-  
+    
 }
 
 TestPluginAudioProcessor::~TestPluginAudioProcessor()
@@ -103,6 +100,8 @@ void TestPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    previousGain = pow(10.0, *treeState.getRawParameterValue(GAIN_ID)/20.0);
+    
 }
 
 void TestPluginAudioProcessor::releaseResources()
@@ -141,6 +140,8 @@ void TestPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     
+    float currentGain = pow(10.0f, *treeState.getRawParameterValue(GAIN_ID)/20.0f);
+    
     // rawVolume = 0.015;
 
     // In case we have more outputs than inputs, this code clears any output
@@ -151,23 +152,32 @@ void TestPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
+    
+    if(currentGain == previousGain){
+        buffer.applyGain(currentGain);
+    }
+    else{
+        buffer.applyGainRamp(0, buffer.getNumSamples(), previousGain, currentGain);
+        previousGain = currentGain;
+    }
+   
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        float* channelData = buffer.getWritePointer (channel);
-        
-        for(int sample = 0; sample < buffer.getNumSamples(); ++sample){
-            channelData[sample] = buffer.getSample(channel, sample) * pow(10.0, rawVolume/20.0);
-        }
-
-        // ..do something to the data...
-    }
+//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    {
+//        float* channelData = buffer.getWritePointer (channel);
+//
+//        for(int sample = 0; sample < buffer.getNumSamples(); ++sample){
+//            channelData[sample] = buffer.getSample(channel, sample) * pow(10.0, rawVolume/20.0);
+//        }
+//
+//        // ..do something to the data...
+//    }
+    
 }
 
 //==============================================================================
@@ -187,12 +197,21 @@ void TestPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    std::unique_ptr<XmlElement> xml(treeState.state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void TestPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+ 
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (treeState.state.getType()))
+            treeState.replaceState (ValueTree::fromXml (*xmlState));
+
 }
 
 //==============================================================================

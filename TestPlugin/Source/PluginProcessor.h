@@ -58,8 +58,9 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    double rawVolume;
+    float rawVolume;
     AudioProcessorValueTreeState treeState;
+    float previousGain;
 private:
     
     //==============================================================================

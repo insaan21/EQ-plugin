@@ -18,10 +18,10 @@ TestPluginAudioProcessorEditor::TestPluginAudioProcessorEditor (TestPluginAudioP
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     sliderAttach = std::make_unique<AudioProcessorValueTreeState:: SliderAttachment>(processor.treeState, GAIN_ID, gainSlider);
-    setSize (200, 400);
+    setSize (400, 400);
     gainSlider.setSliderStyle(Slider:: SliderStyle:: LinearVertical);
     gainSlider.setRange(-48.0f, 0.0f);
-    gainSlider.setValue(-1.0);
+    // gainSlider.setValue(-1.0);
     gainSlider.setTextBoxStyle(Slider:: TextBoxBelow, true, 100, 25);
     gainSlider.addListener(this);
     addAndMakeVisible(gainSlider);
@@ -53,10 +53,13 @@ void TestPluginAudioProcessorEditor:: sliderValueChanged(Slider *slider){
     }
 }
 
-double TestPluginAudioProcessorEditor:: volume(double currDB)
-    {
-        double volume = pow(10.0, (currDB/20.0));
-        return volume;
-    }
-    
+
+// unused anymore
+
+//double TestPluginAudioProcessorEditor:: volume(double currDB)
+//    {
+//        double volume = pow(10.0, (currDB/20.0));
+//        return volume;
+//    }
+//
 

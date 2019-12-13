@@ -769,7 +769,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
@@ -777,7 +778,7 @@
 				);
 				INFOPLIST_FILE = Info-VST3.plist;
 				INFOPLIST_PREPROCESS = NO;
-				INSTALL_PATH = "/Users/ishaanguha/Plugins/VST3";
+				INSTALL_PATH = "/Users/ishaanguha/Plugins";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_LDFLAGS = "-bundle -lTestPlugin";
@@ -821,7 +822,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
@@ -873,7 +875,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
@@ -881,7 +884,7 @@
 				);
 				INFOPLIST_FILE = Info-AU.plist;
 				INFOPLIST_PREPROCESS = NO;
-				INSTALL_PATH = "/Users/ishaanguha/Plugins/AU";
+				INSTALL_PATH = "/Users/ishaanguha/Plugins";
 				LIBRARY_STYLE = Bundle;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_LDFLAGS = "-bundle -lTestPlugin";
@@ -926,7 +929,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GENERATE_PKGINFO_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
@@ -976,7 +980,8 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
@@ -1022,7 +1027,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
@@ -1069,7 +1075,8 @@
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
@@ -1115,7 +1122,8 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/JUCE/modules/juce_audio_processors/format_types/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST3_SDK",
+					"/Users/ishaanguha/VST_SDK/VST2_SDK",
 					"../../JuceLibraryCode",
 					"/Applications/JUCE/modules",
 					"/Applications/JUCE/modules/juce_audio_plugin_client",
