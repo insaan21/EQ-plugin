@@ -43,8 +43,8 @@ void Oscillator::paint (Graphics& g)
     g.drawText("Oscillator", titleArea, Justification::centredTop);
     
 //    Rectangle<float> area (25,25,75,75);
-//    g.setColour(Colours::orange);
-//    g.drawRoundedRectangle(area, 20.0f, 2.0f);
+ //   g.setColour(Colours::orange);
+ //   g.drawRect(getLocalBounds());
 }
 
 void Oscillator::resized()
