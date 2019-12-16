@@ -12,12 +12,15 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "Oscillator.h"
+#include "Envelope.h"
+#include "Filter.h"
 
 //==============================================================================
 /**
 */
-class SynthFrameworkAudioProcessorEditor  : public AudioProcessorEditor,
-                                            public Slider::Listener
+class SynthFrameworkAudioProcessorEditor  : public AudioProcessorEditor
+
 {
 public:
     SynthFrameworkAudioProcessorEditor (SynthFrameworkAudioProcessor&);
@@ -26,18 +29,20 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-    void sliderValueChanged (Slider* slider) override;
+    
     
     
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     SynthFrameworkAudioProcessor& processor;
-    Slider attackSlider;
-    Slider releaseSlider;
-    std::unique_ptr <AudioProcessorValueTreeState:: SliderAttachment> sliderAttach;
-    std::unique_ptr <AudioProcessorValueTreeState:: SliderAttachment> releaseAttach;
-
+    Oscillator oscGui;
+    Envelope envGui;
+    Filter filterGui;
+    
+    
+    
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthFrameworkAudioProcessorEditor)
 };

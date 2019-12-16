@@ -4,6 +4,12 @@
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="EZvpyS" name="SynthFramework">
     <GROUP id="{465BA9DD-CB1C-BF52-614E-C0A5FF1480C6}" name="Source">
+      <FILE id="c8Jn79" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
+      <FILE id="E6VcAu" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
+      <FILE id="e30t0R" name="Envelope.cpp" compile="1" resource="0" file="Source/Envelope.cpp"/>
+      <FILE id="LVUDiI" name="Envelope.h" compile="0" resource="0" file="Source/Envelope.h"/>
+      <FILE id="hq949g" name="Oscillator.cpp" compile="1" resource="0" file="Source/Oscillator.cpp"/>
+      <FILE id="dZPy1Z" name="Oscillator.h" compile="0" resource="0" file="Source/Oscillator.h"/>
       <GROUP id="{489C7E0E-3982-28D7-6797-2787AB0FA9A5}" name="Maximilian-master">
         <GROUP id="{2AF9D051-EFE2-8C73-261C-DF1FAAEE2B35}" name="libs">
           <FILE id="XpKNHo" name="fft.cpp" compile="1" resource="0" file="../Maximilian-master/libs/fft.cpp"/>

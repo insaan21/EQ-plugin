@@ -22,8 +22,14 @@ SynthFrameworkAudioProcessor::SynthFrameworkAudioProcessor()
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
                        ),
- treeState(*this, nullptr, "PARAMETERS", {std::make_unique<AudioParameterFloat> (ATTACK_ID,                                      ATTACK_NAME, 0.1f, 5000.0f, 2000.0f),
-                                          std::make_unique<AudioParameterFloat>(RELEASE_ID, RELEASE_NAME, 0.1f, 10000.0f, 2000.0f)
+ treeState(*this, nullptr, "PARAMETERS", {std::make_unique<AudioParameterFloat> (ATTACK_ID, ATTACK_NAME,   0.1f, 5000.0f, 2000.0f),
+                                          std::make_unique<AudioParameterFloat>(RELEASE_ID, RELEASE_NAME, 0.1f, 10000.0f, 2000.0f),
+                                          std::make_unique<AudioParameterFloat>(DECAY_ID, DECAY_NAME, 0.1f, 10000.0f, 2000.0f),
+                                          std::make_unique<AudioParameterFloat>(SUSTAIN_ID, SUSTAIN_NAME, 0.0f, 1.0f, 0.8f),
+                                          std::make_unique<AudioParameterFloat>(WAVE_ID, WAVE_NAME, 0.0f, 2.0f, 0.0f),
+                                          std::make_unique<AudioParameterFloat>(FILTERTYPE_ID, FILTERTYPE_NAME, 0.0f, 2.0f, 0.0f),
+                                          std::make_unique<AudioParameterFloat>(CUTOFF_ID, CUTOFF_NAME, 20.0f, 10000.0f, 400.0f),
+                                          std::make_unique<AudioParameterFloat>(RES_ID, RES_NAME, 1.0f, 5.0f, 1.0f)
                                         })
 #endif
 {
@@ -148,11 +154,15 @@ void SynthFrameworkAudioProcessor::processBlock (AudioBuffer<float>& buffer, Mid
 {
     for(int i = 0; i <mySynth.getNumVoices(); i++){
         if((myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i)))){
-            myVoice->getParam(treeState.getRawParameterValue(ATTACK_ID),treeState.getRawParameterValue(RELEASE_ID) );
+            myVoice->getParam(treeState.getRawParameterValue(ATTACK_ID),treeState.getRawParameterValue(RELEASE_ID), treeState.getRawParameterValue(DECAY_ID), treeState.getRawParameterValue(SUSTAIN_ID));
+            myVoice->getOscType(treeState.getRawParameterValue("wavetype"));
+            
+            myVoice-> getFilterParams(treeState.getRawParameterValue(FILTERTYPE_ID), treeState.getRawParameterValue(CUTOFF_ID), treeState.getRawParameterValue(RES_ID));
         }
     }
     buffer.clear();
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    visualizer.pushBuffer(buffer);
 }
 
 //==============================================================================

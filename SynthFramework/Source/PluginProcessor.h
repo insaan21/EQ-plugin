@@ -13,12 +13,42 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SynthSound.h"
 #include "SynthVoice.h"
+
 #define ATTACK_ID "attack"
 #define ATTACK_NAME "Attack"
 
 #define RELEASE_ID "release"
-#define RELEASE_NAME "RELEASE"
+#define RELEASE_NAME "Release"
 
+#define DECAY_ID "decay"
+#define DECAY_NAME "Decay"
+
+#define SUSTAIN_ID "sustain"
+#define SUSTAIN_NAME "Sustain"
+
+#define WAVE_ID "wavetype"
+#define WAVE_NAME "Wavetype"
+
+#define CUTOFF_ID "cutoff"
+#define CUTOFF_NAME "Cutoff"
+
+#define RES_ID "res"
+#define RES_NAME "Res"
+
+#define FILTERTYPE_ID "filtertype"
+#define FILTERTYPE_NAME "Filtertype"
+
+class Visualizer : public AudioVisualiserComponent
+{
+public:
+    Visualizer() : AudioVisualiserComponent(2)
+    {
+        setBufferSize(128);
+        setSamplesPerBlock(16);
+        setColours(Colours::black, Colours::indianred);
+    }
+    
+};
 //==============================================================================
 /**
 */
@@ -62,14 +92,19 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    
     float attackTime;
     float releaseTime;
+    float decayTime;
+    float sustain;
+    Visualizer visualizer;
     AudioProcessorValueTreeState treeState;
 private:
     Synthesiser mySynth;
     SynthVoice* myVoice;
     
     
+
     
     double lastSampleRate;
     //==============================================================================

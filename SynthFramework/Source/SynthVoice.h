@@ -20,15 +20,58 @@ public:
         return dynamic_cast<SynthSound*>(sound) != nullptr;
     }
     
-    void getParam(float* attack, float*release){
+    void getParam(float* attack, float*release, float* decay, float*sustain){
         env1.setAttack(double(*attack));
         env1.setRelease(double(*release));
+        env1.setDecay(double(*decay));
+        env1.setSustain(double(*sustain));
+    }
+    
+    void getFilterParams(float* filterType, float* cutoff, float*res){
+        filter = *filterType;
+        cutOff = *cutoff;
+        resonance = *res;
+    }
+    
+    double setFilter(double input){
+        if(filter == 0){
+            return filter1.lores(input, cutOff, resonance);
+        }
+        else if(filter == 1){
+            return filter1.hires(input, cutOff, resonance);
+        }
+        else if(filter == 2){
+            return filter1.bandpass(input, cutOff, resonance);
+        }
+        else{
+            return filter1.lores(input, cutOff, resonance);
+        }
+    }
+    
+    
+    void getOscType(float* selection){
+        theWave = *selection;
+    }
+    
+    double setOscType(){
+        if(theWave == 0){
+            return osc1.sinewave(frequency);
+        }
+        else if(theWave  == 1){
+            return osc1.saw(frequency);
+        }
+        else if(theWave == 2){
+            return osc1.square(frequency);
+        }
+        else{
+            return osc1.sinewave(frequency);
+        }
     }
     void startNote(int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition){
         env1.trigger = 1;
         level = velocity;
         frequency = MidiMessage::getMidiNoteInHertz(midiNoteNumber);
-        std::cout<<midiNoteNumber<<std::endl;
+        // std::cout<<midiNoteNumber<<std::endl;
     }
     
     void stopNote(float velocity, bool allowTailOff){
@@ -62,18 +105,14 @@ public:
     }
     
     void renderNextBlock(AudioBuffer<float> &outputBuffer, int startSample, int numSamples){
-        // env1.setAttack(2000);
-        env1.setDecay(500);
-        env1.setSustain(0.8);
+        
         
         
         for (int sample = 0; sample < numSamples; ++sample){
-                   double theWave = osc1.saw(frequency) * level;
-                   double theSound = env1.adsr(theWave, env1.trigger) * level;
-                   double filteredSound = filter1.lores(theSound, 40, 0.1);
+                   double theSound = env1.adsr(setOscType(), env1.trigger);
             
                    for(int channel = 0; channel < outputBuffer.getNumChannels(); ++channel){
-                       outputBuffer.addSample(channel, startSample, filteredSound);
+                       outputBuffer.addSample(channel, startSample, setFilter(theSound)*0.3f);
                    }
                    ++startSample;
                }
@@ -96,7 +135,10 @@ public:
 private:
     double level;
     double frequency;
-    
+    int theWave;
+    int filter;
+    double cutOff;
+    double resonance;
     maxiOsc osc1;
     maxiEnv env1;
     maxiFilter filter1;
