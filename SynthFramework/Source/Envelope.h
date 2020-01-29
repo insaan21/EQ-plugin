@@ -27,7 +27,6 @@ public:
     void resized() override;
 
 private:
-    
     SynthFrameworkAudioProcessor& processor;
     
     Slider attackSlider;

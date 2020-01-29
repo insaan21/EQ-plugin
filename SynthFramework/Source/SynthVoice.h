@@ -25,6 +25,13 @@ public:
         env1.setRelease(double(*release));
         env1.setDecay(double(*decay));
         env1.setSustain(double(*sustain));
+        
+        //2nd envelope
+        env2.setAttack(double(*attack));
+        env2.setRelease(double(*release));
+        env2.setDecay(double(*decay));
+        env2.setSustain(double(*sustain));
+        
     }
     
     void getFilterParams(float* filterType, float* cutoff, float*res){
@@ -34,6 +41,9 @@ public:
     }
     
     double setFilter(double input){
+        //this overrides the cutOff slider
+        cutOff = (env2.adsr(1, env2.trigger)*5000) + 100;
+        
         if(filter == 0){
             return filter1.lores(input, cutOff, resonance);
         }
@@ -110,9 +120,9 @@ public:
         
         for (int sample = 0; sample < numSamples; ++sample){
                    double theSound = env1.adsr(setOscType(), env1.trigger);
-            
+                   theSound = (setFilter(theSound)*0.3f);
                    for(int channel = 0; channel < outputBuffer.getNumChannels(); ++channel){
-                       outputBuffer.addSample(channel, startSample, setFilter(theSound)*0.3f);
+                       outputBuffer.addSample(channel, startSample, theSound);
                    }
                    ++startSample;
                }
@@ -142,4 +152,5 @@ private:
     maxiOsc osc1;
     maxiEnv env1;
     maxiFilter filter1;
+    maxiEnv env2;
 };
